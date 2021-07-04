@@ -1,0 +1,24 @@
+version: '3'
+services:
+  bootmysql:
+    image: 'mysql:8.0.25'
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_USER=sa
+      - MYSQL_DATABASE=persondb
+    ports:
+      - "3307:3306"
+    restart: always
+  docker-spring-boot:
+    image: docker-spring-boot
+    ports:
+      - "8989:8989"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://bootmysql:3306/persondb
+      SPRING_DATASOURCE_USERNAME: "sa"
+      SPRING_DATASOURCE_PASSWORD: "password"
+    build:
+      context: "./"
+      dockerfile: "Dockerfile"
+    depends_on:
+      - bootmysql
